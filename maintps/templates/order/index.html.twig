@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block body %}
+    <div class="container accueil">
+        <div class="row">
+            <div class="col-5 mt-4 d-flex flex-row justify-content-around">
+                <h3>Gestion des Commandes</h3>
+                <a class="btn btn-primary" href="{{ path('order_new') }}" role="button">Nouvelle commande</a>
+            </div>
+        </div>
+
+{% endblock %}

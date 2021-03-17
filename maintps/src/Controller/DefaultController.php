@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,15 +11,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="home")
      */
-    public function number(): Response
+    public function index(OrderRepository $orderRepository): Response
     {
-        $number = random_int(0, 100);
-
-        return $this->render('lucky/number.html.twig', [
-            'number' => $number,
+        $orders=$orderRepository->inProgressOrder();
+        return $this->render('default/default.html.twig', [
+            'orders'    =>  $orders
         ]);
     }
-
 }

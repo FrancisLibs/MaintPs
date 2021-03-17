@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création utilisateur{% endblock %}
+{% block header_img %}{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        {{ form_start(form, {'action' : path('user_create')}) }}
+        <div class="row justify-content-center">
+            <div class="col-2 mt-3">
+                <h2 class="text-center">Inscription</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3 mt-2">
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username) }}
+
+                {{ form_label(form.password.first) }}
+                {{ form_widget(form.password.first) }}
+        
+                {{ form_label(form.lastName) }}
+                {{ form_widget(form.lastName) }}
+            </div>
+            <div class="col-3 mt-2">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+
+                {{ form_label(form.password.second) }}
+                {{ form_widget(form.password.second) }}
+
+                {{ form_label(form.firstName) }}
+                {{ form_widget(form.firstName) }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3">
+                {{ form_label(form.phoneNumber) }}
+                {{ form_widget(form.phoneNumber) }}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-3 text-center">
+                <button type="submit" class="btn btn-success pull-right btn-lg mt-3">Valider</button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
