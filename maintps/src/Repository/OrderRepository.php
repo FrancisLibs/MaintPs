@@ -40,7 +40,7 @@ class OrderRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('o')
             ->andWhere('o.status = :val')
-            ->setParameter('val', 0)
+            ->setParameter('val', Order::EN_COURS)
             ->getQuery()
             ->getResult()
         ;

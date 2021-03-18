@@ -28,11 +28,13 @@ class Order
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     private $orderNumber;
 
     /**
+     * 
      * @ORM\Column(type="date")
      */
     private $createdAt;
@@ -71,6 +73,7 @@ class Order
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $designation;
 
@@ -86,6 +89,7 @@ class Order
 
     /**
      * @ORM\Column(type="string", length=1)
+     * @Assert\NotBlank
      */
     private $status;
 
@@ -102,12 +106,12 @@ class Order
         return $this->id;
     }
 
-    public function getOrderNumber(): ?int
+    public function getOrderNumber(): ?string
     {
         return $this->orderNumber;
     }
 
-    public function setOrderNumber(int $orderNumber): self
+    public function setOrderNumber(string $orderNumber): self
     {
         $this->orderNumber = $orderNumber;
 
