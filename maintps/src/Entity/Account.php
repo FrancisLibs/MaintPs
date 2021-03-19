@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\AccountRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AccountRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
@@ -21,16 +22,19 @@ class Account
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
      */
     private $designation;
 
     /**
      * @ORM\Column(type="string", length=1)
+     * @Assert\NotBlank
      */
     private $letter;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank
      */
     private $accountNumber;
 
@@ -73,12 +77,12 @@ class Account
         return $this;
     }
 
-    public function getAccountNumber(): ?int
+    public function getAccountNumber(): ?string
     {
         return $this->accountNumber;
     }
 
-    public function setAccountNumber(?int $accountNumber): self
+    public function setAccountNumber(?string $accountNumber): self
     {
         $this->accountNumber = $accountNumber;
 

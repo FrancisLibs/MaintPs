@@ -4,13 +4,14 @@ namespace App\tests\Entity;
 
 use App\Entity\Task;
 use App\Entity\User;
+use App\Entity\Order;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserTest extends KernelTestCase
 {
     private $user;
-    private $task;
+    private $order;
 
     public function setUp()
     {
@@ -18,12 +19,18 @@ class UserTest extends KernelTestCase
             ->setUsername('UtilisateurTest')
             ->setRoles(["ROLE_USER"])
             ->setPassword('password')
-            ->setEmail('utilTest@gmail.com');
+            ->setEmail('utilTest@gmail.com')
+            ->setPhoneNumber("0687823380")
+            ->setFirstName("Francis")
+            ->setLastName("Libs")
+        ;
    
-        $this->task = (new Task())
-            ->setCreatedAt(new \DateTime('2011-01-01'))
-            ->setTitle("TaskTitle")
-            ->setContent("TaskContent");
+        $this->order = (new Order())
+            ->setorderNumber("Numero d'essai")
+            ->setDesignation("Facture d'essai")
+            ->setStatus(Order::EN_COURS)
+            ->setUser($this->user)
+        ;
     }
 
     public function assertHasErrors(User $user, int $number = 0)
@@ -44,49 +51,58 @@ class UserTest extends KernelTestCase
         $this->assertEquals("UtilisateurTest", $this->user->getUserName());
         $this->assertEquals(["ROLE_USER"], $this->user->getRoles());
         $this->assertEquals("password", $this->user->getPassword());
-        $this->assertEquals("utilTest@gmail.com", $this->user->getEmail());
+        $this->assertEquals("0687823380", $this->user->getPhoneNumber());
+        $this->assertEquals("Francis", $this->user->getFirstName());
+        $this->assertEquals("Libs", $this->user->getLastName());
     }
 
-    public function testAddAndRemoveTask()
+    public function testAddAndRemoveOrder()
     {
-        $this->user->addTask($this->task);
-        $this->assertEquals($this->user, $this->task->getUser());
+        $this->user->addOrder($this->order);
+        $this->assertEquals($this->user, $this->order->getUser());
 
-        $tasksCollection = $this->user->getTasks();
-        $this->assertEquals(1, count($tasksCollection));
+        $orderCollection = $this->user->getOrders();
+        $this->assertEquals(1, count($orderCollection));
         
-        foreach ($tasksCollection as $task) {
-            $this->user->removeTask($task);
+        foreach ($orderCollection as $order) {
+            $this->user->removeOrder($order);
         }
-        $tasksCollection = $this->user->getTasks();
-        $this->assertEquals(0, count($tasksCollection));
-        $this->assertEquals(null, $this->task->getUser());
+
+        $ordersCollection = $this->user->getOrders();
+        $this->assertEquals(0, count($ordersCollection));
+        $this->assertEquals(null, $this->order->getUser());
     }
 
     public function testMinLenghtUsername()
     {
         $this->assertHasErrors($this->user->setUsername("j"), 1);
     }
+
     public function testBlankUsername()
     {
-        $this->assertHasErrors($this->user->setUsername(""), 1);
+        $this->assertHasErrors($this->user->setUsername(""), 2);
     }
+
     public function testMinLenghtPassword()
     {
         $this->assertHasErrors($this->user->setPassword("jkkkk"), 1);
     }
+
     public function testBlankPassword()
     {
-        $this->assertHasErrors($this->user->setPassword(""), 1);
+        $this->assertHasErrors($this->user->setPassword(""), 2);
     }
+
     public function testBlankEmail()
     {
         $this->assertHasErrors($this->user->setEmail(""), 1);
     }
+
     public function testValidEmail()
     {
         $this->assertHasErrors($this->user->setEmail("d@f"), 1);
     }
+
     public function testEmailPattern()
     {
         $this->assertHasErrors($this->user->setEmail("d@f.com"), 0);
