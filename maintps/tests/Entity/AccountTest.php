@@ -48,7 +48,7 @@ class AccountTest extends KernelTestCase
         $this->assertEquals(Order::EN_ATTENTE, $this->order->getStatus());
     }
 
-    public function testInvalidBlankDesgnation()
+    public function testInvalidBlankDesignation()
     {
         $this->assertHasErrors($this->account->setDesignation(""), 1);
     }

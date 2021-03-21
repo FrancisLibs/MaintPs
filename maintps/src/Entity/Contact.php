@@ -11,6 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Contact
 {
+    const MALE = 0;
+    const FEMALE = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +34,7 @@ class Contact
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank
      */
     private $gender;
 

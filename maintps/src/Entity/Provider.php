@@ -63,6 +63,12 @@ class Provider
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Range(
+     *      min = 0,
+     *      max = 10,
+     *      notInRangeMessage = "Merci de sélectionner une note entre {{ min }} et {{ max }}",
+     * )
      */
     private $note;
 

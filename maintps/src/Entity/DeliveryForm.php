@@ -22,13 +22,12 @@ class DeliveryForm
      * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank
      */
-    private $number;
+    private $deliveryFormNumber;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
      */
-    private $deliveryDate;
+    private $deliveryFormDate;
 
     /**
      * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="deliveryForms")
@@ -46,26 +45,26 @@ class DeliveryForm
         return $this->id;
     }
 
-    public function getNumber(): ?string
+    public function getDeliveryFormNumber(): ?string
     {
-        return $this->number;
+        return $this->deliveryFormNumber;
     }
 
-    public function setNumber(string $number): self
+    public function setDeliveryFormNumber(string $deliveryFormNumber): self
     {
-        $this->number = $number;
+        $this->deliveryFormNumber = $deliveryFormNumber;
 
         return $this;
     }
 
-    public function getDeliveryDate(): ?\DateTimeInterface
+    public function getDeliveryFormDate(): ?\DateTimeInterface
     {
-        return $this->deliveryDate;
+        return $this->deliveryFormDate;
     }
 
-    public function setDeliveryDate(\DateTimeInterface $deliveryDate): self
+    public function setDeliveryFormDate(\DateTimeInterface $deliveryFormDate): self
     {
-        $this->deliveryDate = $deliveryDate;
+        $this->deliveryFormDate = $deliveryFormDate;
 
         return $this;
     }

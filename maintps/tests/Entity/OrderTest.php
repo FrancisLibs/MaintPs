@@ -12,6 +12,7 @@ class OrderTest extends KernelTestCase
     private $order;
     private $provider;
     private $user;
+    private $date;
 
     public function setUp()
     {
@@ -22,13 +23,19 @@ class OrderTest extends KernelTestCase
         $this->user = (new User())
             ->setUserName('Francis')
         ;
-
+        
+        $this->date = new \DateTime('2021-03-18 09:00:00', new \DateTimeZone('Europe/Paris'));
+       
         $this->order = (new Order())
             ->setOrderNumber(1)
             ->setExpectedAmount(250)
             ->setDesignation('essai de commande')
             ->setExpectedDeliveryDate(new \DateTime())
             ->setStatus(1)
+            ->setProvider($this->provider)
+            ->setUser($this->user)
+            ->setCreatedAt($this->date)
+            ->setExpectedDeliveryDate($this->date)
         ;
     }
 
@@ -47,22 +54,11 @@ class OrderTest extends KernelTestCase
     public function testValidEntity()
     {
         $this->assertHasErrors($this->order, 0);
-
-        $this->order->setOrderNumber(1);
         $this->assertEquals(1, $this->order->getOrderNumber());
-
-        $this->order->setProvider($this->provider);
         $this->assertEquals($this->provider, $this->order->getProvider());
-
-        $this->order->setUser($this->user);
         $this->assertEquals($this->user, $this->order->getUser());
-
-        $date = new \DateTime('2021-03-18 09:00:00', new \DateTimeZone('Europe/Paris'));
-        $this->order->setCreatedAt($date);
-        $this->assertEquals($date, $this->order->getCreatedAT());
-
-        $this->order->setExpectedDeliveryDate($date);
-        $this->assertEquals($date, $this->order->getExpectedDeliveryDate());
+        $this->assertEquals($this->date, $this->order->getCreatedAT());
+        $this->assertEquals($this->date, $this->order->getExpectedDeliveryDate());
     }
 
     public function testInvalidBlankOrderNumber()
