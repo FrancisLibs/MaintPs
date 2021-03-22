@@ -15,10 +15,10 @@ class DeliveryFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('number', TextType::class, [
+            ->add('deliveryFormNumber', TextType::class, [
                 'label'     =>  'Numéro : ',
             ])
-            ->add('deliveryDate', DateType::class, [
+            ->add('deliveryFormDate', DateType::class, [
                 'widget' => 'single_text',
                 'label'     =>  'Date : ',
             ])

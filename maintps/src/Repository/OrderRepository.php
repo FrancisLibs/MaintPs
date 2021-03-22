@@ -34,7 +34,7 @@ class OrderRepository extends ServiceEntityRepository
 
     /**
      * 
-     * @return Order[] Returns an array of in progress orders objects
+     * @return Order[] Returns an array of in progress orders objects (status : en cours)
      */
     public function inProgressOrder()
     {

@@ -147,8 +147,8 @@ class AppFixtures extends Fixture
                 for($l=0; $l<(rand(1,3)); $l++)
                 {
                     $deliveryForm = (new DeliveryForm())
-                        ->setNumber($faker->randomNumber(5))
-                        ->setDeliveryDate(new \DateTime())
+                        ->setDeliveryFormNumber($faker->randomNumber(5))
+                        ->setDeliveryFormDate(new \DateTime())
                         ->setOrder($order)
                     ;
                     $order->addDeliveryForm($deliveryForm);

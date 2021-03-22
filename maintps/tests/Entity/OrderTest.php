@@ -31,7 +31,7 @@ class OrderTest extends KernelTestCase
             ->setExpectedAmount(250)
             ->setDesignation('essai de commande')
             ->setExpectedDeliveryDate(new \DateTime())
-            ->setStatus(1)
+            ->setStatus(Order::CLOTUREE)
             ->setProvider($this->provider)
             ->setUser($this->user)
             ->setCreatedAt($this->date)
