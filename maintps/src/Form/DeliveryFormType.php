@@ -22,7 +22,9 @@ class DeliveryFormType extends AbstractType
                 'widget' => 'single_text',
                 'label'     =>  'Date : ',
             ])
-            ->add('validation', SubmitType::class)
+            ->add('validation', SubmitType::class, [
+                'label' => 'Ajouter'
+            ])
         ;
     }
 

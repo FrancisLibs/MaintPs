@@ -32,7 +32,7 @@ class DeliveryFormController extends AbstractController
             $deliveryForm->setOrder($order);
             $manager->persist($deliveryForm);
             $manager->flush();
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('order_show', ['id' => $id]);
         }
         return $this->render('delivery_Form/create.html.twig', [
             'form' => $form->createView(),
