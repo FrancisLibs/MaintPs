@@ -3,36 +3,36 @@
 {% block title %}Commande {{ order.orderNumber }}{% endblock %}
 
 {% block body %}
-    <div class="container accueil">
+    <div class="container accueil mt-3">
         <div class="row">
             <div class="col-4">
-                <h2 class="titreShowOrder mt-4 p-2">
+                <h3 class="titreShowOrder mt-4 p-2 text-center">
                     Commande
                     {% set array = [] %}
                     {% for account in order.account %}
                         {% set array = array|merge([ account.letter ]) %}                             
                     {% endfor %}
                     R2{{ array|join("") }}40-{{ order.orderNumber }}
-                </h2>
+                </h3>
+            </div>
+            <div class="col-7 offset-1">
+                <div class="my-4 d-flex flex-column justify-content-around">
+                    <div class="row">
+                        <div class="col-5 mb-4"><strong>Fournisseur : {{ order.provider.username }}</strong></div>
+                        <div class="col-6"><strong>Désignation : </strong>{{ order.designation }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 mb-4"><strong>Montant : </strong>{{ order.expectedAmount }}</div>
+                        <div class="col-6"><strong>Date: </strong>{{ order.createdAt | date("d/m/Y") }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 mb-4"><strong>Date livraison prévue : </strong>{{ order.expectedDeliveryDate | date("d/m/Y") }}</div>
+                        <div class="col-6"><strong>Statut : </strong>{{ order.textStatus }}</div>
+                    </div>
+                </div>
             </div>
         </row>
-        <div class="row">
-            <div class="my-4 d-flex flex-column justify-content-around">
-                <div class="row">
-                    <div class="col-5 mb-4"><strong>Fournisseur : {{ order.provider.username }}</strong></div>
-                    <div class="col-6"><strong>Désignation : </strong>{{ order.designation }}</div>
-                </div>
-                <div class="row">
-                    <div class="col-5 mb-4"><strong>Montant : </strong>{{ order.expectedAmount }}</div>
-                    <div class="col-6"><strong>Date: </strong>{{ order.createdAt | date("d/m/Y") }}</div>
-                </div>
-                <div class="row">
-                    <div class="col-5 mb-4"><strong>Date livraison : </strong>{{ order.expectedDeliveryDate | date("d/m/Y") }}</div>
-                    <div class="col-6"><strong>Statut : </strong>{{ order.status }}</div>
-                </div>
-            </div>
-        </div>
-
+        
         {# Bon de livraison et factures #}
         <div class="row">
             <div class="col-5">
@@ -51,7 +51,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="col-5 offset-2">
+            <div class="col-6 offset-1">
                 <div class="d-flex">
                     <h2 class="subTitleShowOrder col-5">Factures</h2>
                     <a class="btn btn-primary btn-sm" href="{{ path('order_new') }}" role="button">Ajout Facture</a>

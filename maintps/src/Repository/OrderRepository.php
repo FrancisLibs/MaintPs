@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Order;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Data\SearchData;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -46,32 +48,19 @@ class OrderRepository extends ServiceEntityRepository
         ;
     }
 
-    // /**
-    //  * @return Order[] Returns an array of Order objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findSearch(SearchData $search)
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $query = $this
+            ->createQueryBuilder('o');
 
-    /*
-    public function findOneBySomeField($value): ?Order
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if(!empty($search->numero)) {
+            $query = $query
+                ->andWhere('o.orderNumber = :numero')
+                ->setParameter('numero', $search->numero)
+            ;
+        }
+            
+        return $query->getQuery()->getResult();
     }
-    */
+
 }

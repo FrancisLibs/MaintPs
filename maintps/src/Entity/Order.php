@@ -309,4 +309,20 @@ class Order
 
         return $this;
     }
+
+    public function getTextStatus(): ?string
+    {
+        switch($this->status) {
+            case 0:
+                return "En cours";
+                break;
+            case 1:
+                return "En attente";
+                break;
+            case 2:
+                return "Cloturée";
+                break;
+        }
+        
+    }
 }

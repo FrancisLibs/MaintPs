@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Form\OrderType;
+use App\Data\SearchData;
+use App\Form\SearchForm;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,12 +28,35 @@ class OrderController extends AbstractController
 
     /**
      * @Route("/order", name="order")
+     */
+    public function orderIndex(OrderRepository $orderRepository, Request $request, PaginatorInterface $paginator): Response
+    {
+        $data = $orderRepository->inProgressOrder();
+        $orders = $paginator->paginate(
+            $data,  // Données à paginer
+            $request->query->getInt('page', 1),  // Numéro page en cours, 1 par défaut
+            15   // Nombre de commandes/page
+        );
+
+        return $this->render('order/default.html.twig', [
+            'orders'    =>  $orders
+        ]);
+    }
+
+    /**
+     * @Route("/order/list", name="order_list")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function index(): Response
+    public function index(Request $request) : Response
     {
-        return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
+        $data = new SearchData();
+        $form = $this->createForm(SearchForm::class, $data);
+        $form->handleRequest($request);
+        $orders = $this->orderRepository->findSearch($data);
+
+        return $this->render('order/list.html.twig', [
+            'orders'    =>  $orders,
+            'form'      =>  $form->createView()
         ]);
     }
 
@@ -58,8 +84,7 @@ class OrderController extends AbstractController
         $form = $this->createForm(OrderType::class, $order);
         
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $order = $form->getData();
             $order->setuser($this->getUser());
             $order->setCreatedAt(new \DateTime('now'));
@@ -84,6 +109,18 @@ class OrderController extends AbstractController
     {
         return $this->render('order/show.html.twig', [
             'order'    => $order,
+        ]);
+    }
+
+    /**
+     * @Route("/order/filter", name="order_filter")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function filter(): Response
+    {
+
+        return $this->render('order/index.html.twig', [
+            'orders'    =>  $orders
         ]);
     }
 }
