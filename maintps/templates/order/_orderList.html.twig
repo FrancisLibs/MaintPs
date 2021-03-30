@@ -1,0 +1,42 @@
+<div class="row">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Numéro</th>
+                <th scope="col">Date</th>
+                <th scope="col">Fournisseur</th>
+                <th scope="col">Designation</th>
+                <th scope="col">Créateur</th>
+                <th scope="col">Montant</th>
+                <th scope="col">Date Livraison</th>
+                <th scope="col">Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <th scope="row">
+                        <a href="{{ path('order_show', { 'id': order.id }) }}">
+                            {% set array = [] %}
+                            {% for account in order.account %}
+                                {% set array = array|merge([ account.letter ]) %}                             
+                            {% endfor %}
+                            R2{{ array|join("") }}40-{{ order.orderNumber }}
+                        </a>
+                    </th>
+                    <td>{{ order.createdAt|date("m/d/Y") }}</td>
+                    <td>{{ order.provider.username }}</td>
+                    <td>{{ order.designation }}</td>
+                    <td>{{ 
+                        order.user.firstName|first 
+                        ~ 
+                        order.user.lastName|first 
+                    }}</td>
+                    <td>{{ order.expectedAmount }}</td>
+                    <td>{{ order.expectedDeliveryDate|date("m/d/Y") }}</td>
+                    <td>{{ order.textStatus }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-class SearchData
+class SearchOrder
 {
     /**
      * Le numéro de la commande
@@ -10,5 +10,12 @@ class SearchData
      * @var int
      */
     public $numero;
+
+    /**
+     * Numéro de compte
+     *
+     * @var Account[]
+     */
+    public $account = [];
     
 }

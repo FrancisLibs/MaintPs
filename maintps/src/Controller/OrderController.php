@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Form\OrderType;
-use App\Data\SearchData;
 use App\Form\SearchForm;
+use App\Data\SearchOrder;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -49,9 +49,10 @@ class OrderController extends AbstractController
      */
     public function index(Request $request) : Response
     {
-        $data = new SearchData();
+        $data = new SearchOrder();
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($request);
+        //dd($data);
         $orders = $this->orderRepository->findSearch($data);
 
         return $this->render('order/list.html.twig', [
@@ -109,18 +110,6 @@ class OrderController extends AbstractController
     {
         return $this->render('order/show.html.twig', [
             'order'    => $order,
-        ]);
-    }
-
-    /**
-     * @Route("/order/filter", name="order_filter")
-     * @Security("is_granted('ROLE_USER')")
-     */
-    public function filter(): Response
-    {
-
-        return $this->render('order/index.html.twig', [
-            'orders'    =>  $orders
         ]);
     }
 }
