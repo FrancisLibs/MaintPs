@@ -3,13 +3,13 @@
         <thead>
             <tr>
                 <th scope="col">Numéro</th>
-                <th scope="col">Date</th>
-                <th scope="col">Fournisseur</th>
-                <th scope="col">Designation</th>
-                <th scope="col">Créateur</th>
-                <th scope="col">Montant</th>
-                <th scope="col">Date Livraison</th>
-                <th scope="col">Statut</th>
+                <th scope="col" class="text-center">Date</th>
+                <th scope="col" class="text-center">Fournisseur</th>
+                <th scope="col" class="text-center">Designation</th>
+                <th scope="col" class="text-center">Utilisateur</th>
+                <th scope="col" class="text-center">Montant</th>
+                <th scope="col" class="text-center">Date Livraison</th>
+                <th scope="col" class="text-center">Statut</th>
             </tr>
         </thead>
         <tbody>
@@ -24,17 +24,17 @@
                             R2{{ array|join("") }}40-{{ order.orderNumber }}
                         </a>
                     </th>
-                    <td>{{ order.createdAt|date("m/d/Y") }}</td>
-                    <td>{{ order.provider.username }}</td>
-                    <td>{{ order.designation }}</td>
-                    <td>{{ 
+                    <td class="text-center">{{ order.createdAt|date("m/d/Y") }}</td>
+                    <td class="text-center">{{ order.provider.username }}</td>
+                    <td class="text-center">{{ order.designation }}</td>
+                    <td class="text-center">{{ 
                         order.user.firstName|first 
                         ~ 
                         order.user.lastName|first 
                     }}</td>
-                    <td>{{ order.expectedAmount }}</td>
-                    <td>{{ order.expectedDeliveryDate|date("m/d/Y") }}</td>
-                    <td>{{ order.textStatus }}</td>
+                    <td class="text-center">{{ order.expectedAmount }}</td>
+                    <td class="text-center">{{ order.expectedDeliveryDate|date("m/d/Y") }}</td>
+                    <td class="text-center">{{ order.textStatus }}</td>
                 </tr>
             {% endfor %}
         </tbody>

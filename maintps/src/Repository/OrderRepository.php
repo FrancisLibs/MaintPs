@@ -4,10 +4,12 @@ namespace App\Repository;
 
 use App\Entity\Order;
 use App\Data\SearchOrder;
+use App\Form\SearchForm;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Cache\VoidCache;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Order|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +19,12 @@ use Doctrine\Common\Cache\VoidCache;
  */
 class OrderRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Order::class);
+        $this->paginator = $paginator;
     }
 
     /**
@@ -52,9 +57,9 @@ class OrderRepository extends ServiceEntityRepository
      * Récupère les commandes liées à une recherche
      *
      * @param SearchData $search
-     * @return Order[]
+     * @return PaginationInterface
      */
-    public function findSearch(SearchOrder $search): Array
+    public function findSearch(SearchOrder $search): PaginationInterface
     {
         $query = $this
             ->createQueryBuilder('o')
@@ -75,7 +80,38 @@ class OrderRepository extends ServiceEntityRepository
             ->setParameter('numero', $search->account);
         }
 
-        return $query->getQuery()->getResult();
+        if(!empty($search->provider)) {
+            $query = $query
+            ->andWhere('p.id IN (:provider)')
+            ->setParameter('provider', $search->provider);
+        }
+
+        if(!empty($search->status)) {
+            $query = $query
+            ->andWhere('o.status IN (:status)')
+            ->setParameter('status', $search->status);
+        }
+
+        if (!empty($search->designation)) {
+            $query = $query
+                ->andWhere('o.designation LIKE :designation')
+                ->setParameter('designation', "%{$search->designation}%");
+        }
+
+        if(!empty($search->user)) {
+            $query = $query
+            ->andWhere('u.id IN (:user)')
+            ->setParameter('user', $search->user);
+        }
+
+        $query = $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $search->page,
+            15
+        );
+
     }
 
 }

@@ -18,7 +18,11 @@
                     </div>
                 </div>
                 {% include 'order/_orderList.html.twig' with {orders: orders} only %}
-            </article> 
+                <div>
+                    {{ knp_pagination_render(orders) }}
+                </div>
+            </article>
+            
         </div>
     </main>
 

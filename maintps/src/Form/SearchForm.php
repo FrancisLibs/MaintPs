@@ -2,14 +2,20 @@
 
 namespace App\Form;
 
+use App\Entity\User;
+use App\Entity\Order;
 use App\Entity\Account;
+use App\Entity\Provider;
 use App\Data\SearchOrder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class SearchForm extends AbstractType
 {
@@ -17,23 +23,49 @@ class SearchForm extends AbstractType
     {
         $builder
             ->add('numero', IntegerType::class, [
-                'label' => false,
+                'label'     => false,
                 'required'  => false,
-                'attr' => [
-                    'placeholder' => 'Rechercher'
-                ]
+                'attr'      => ['placeholder' => 'Num de commande']
             ])
 
+            ->add('provider', EntityType::class, [
+                'label'     => false,
+                'required'  => false,
+                'class'     => Provider::class,
+                'placeholder' => 'Fournisseur...'
+            ])
+
+            ->add('user', EntityType::class, [
+                'label'     => false,
+                'required'  => false,
+                'class'     => User::class,
+                'placeholder' => 'Utilisateur...'
+            ])
             ->add('account', EntityType::class, [
-                'label' => false,
+                'label'     => false,
                 'required'  => false,
-                'class' => Account::class,
+                'class'     => Account::class,
                 'expanded'  => true,
-                'multiple' =>   true,
+                'multiple'  => true,
             ])
 
-            ->add('Filtrer', SubmitType::class, [
-                'label' => 'Filtrer'
+            ->add('status', ChoiceType::class, [
+                'label' => false,
+                'choices'  => [
+                    'Encours' => Order::EN_COURS,
+                    'En attente' => Order::EN_ATTENTE,
+                    'Cloturée' => Order::CLOTUREE
+                ],
+                'expanded'  => true,
+                'multiple'  => true,
+            ])
+
+            ->add('designation', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Désignation...'
+                ]
             ])
         ;
     }

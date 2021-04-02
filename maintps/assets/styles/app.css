@@ -7,13 +7,18 @@ body {
     width: 34%;
 }
 
-.titreShowOrder{
+.titreShowOrder {
     border: 1px blue solid;
     border-radius: 4px;
     background-color: blue;
     color: white;
 }
 
-.subTitleShowOrder{
+.subTitleShowOrder {
     font-size : 1.5em;
+}
+
+.filter {
+    display: block;
+    position: sticky;
 }

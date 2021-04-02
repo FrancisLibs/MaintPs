@@ -50,6 +50,7 @@ class OrderController extends AbstractController
     public function index(Request $request) : Response
     {
         $data = new SearchOrder();
+        $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($request);
         //dd($data);
