@@ -17,30 +17,43 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label' => 'Identifiant*',
+                'label' => 'Identifiant',
                 'required' => true,
+                'attr' => [
+                    'placeholder' => 'Identifiant...'
+                ],
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
-                'first_options'  => ['label' => 'Password*'],
-                'second_options' => ['label' => 'Vérification*'],
+                'first_options'  => [
+                    'label' => 'Mot de passe',
+                    'attr' => ['placeholder' => 'Mot de passe...'],
+                ],
+                'second_options' => [
+                    'label' => 'Vérification',
+                    'attr' => ['placeholder' => 'Vérification...'],
+                ],
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email*',
+                'label' => 'Email',
+                'attr' => ['placeholder' => 'Email...'],
                 'required' => true,
             ])
             ->add('phoneNumber', TextType::class, [
                 'label' => 'Téléphone',
+                'attr' => ['placeholder' => 'Numéro de téléphone...'],
             ])
             ->add('firstName', TextType::class, [
-                'label' => 'Prénom*',
+                'label' => 'Prénom',
+                'attr' => ['placeholder' => 'Prénom...'],
                 'required' => true,
             ])
             ->add('lastName', TextType::class, [
-                'label' => 'Nom*',
+                'label' => 'Nom',
+                'attr' => ['placeholder' => 'Nom...'],
                 'required' => true,
             ])
         ;

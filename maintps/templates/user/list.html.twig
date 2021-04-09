@@ -5,16 +5,6 @@
 {% block body %}
     <main class="container-fluid mt-4">
         <div class="row">
-           {# <aside class="col-2">
-                <div class="border border-info rounded mt-5">
-                    <h3 class="mx-auto mt-1" style="width: 80px; color: white;">Filtres</h3>
-                    <form method="post" action="{{path('order_filter')}}">
-                        <label for="orderNumber">Numéro :</label>
-                        <input type="text" name="orderNumber">
-                        <input type="submit" value="valider">
-                    </form>
-                </div>
-            </aside> #}
             <article class="col-10 offset-2">
                 <div class="row">
                     <div class="col-3">
@@ -40,11 +30,20 @@
                             {% for user in users %}
                                 <tr>
                                     <td>{{ user.userName }}</td>
-                                    <td>{{ 
-                                        {% for role in roles %} 
-                                            user.role 
-                                        {% endfor %}
-                                    }}</td>
+                                    <td>
+                                        {% if user.roles | length > 1 %}
+                                            {% for role in user.roles %} 
+                                                {{ role }}
+                                                {% if not loop.last %}
+                                                    -
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for role in user.roles %} 
+                                                {{ role }}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.phoneNumber }}</td>
                                     <td>{{ user.firstName }}</td>

@@ -9,11 +9,14 @@ use App\Data\SearchOrder;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use PHP_CodeSniffer\Tokenizers\JS;
+use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class OrderController extends AbstractController
 {
@@ -53,9 +56,14 @@ class OrderController extends AbstractController
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($request);
-        //dd($data);
         $orders = $this->orderRepository->findSearch($data);
-
+        if($request->get('ajax')){
+            return new JsonResponse([
+                'content'   =>  $this->renderView('order/_orders.html.twig', ['orders' => $orders]),
+                'sorting'   =>  $this->renderView('order/_sorting.html.twig', ['orders' => $orders]),
+                'pagination'   =>  $this->renderView('order/_pagination.html.twig', ['orders' => $orders]),
+            ]);
+        }
         return $this->render('order/list.html.twig', [
             'orders'    =>  $orders,
             'form'      =>  $form->createView()

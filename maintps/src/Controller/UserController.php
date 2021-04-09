@@ -27,7 +27,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/create", name="user_create")
+     * @Route("/users/index", name="user_list")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return RedirectResponse|Response
@@ -50,7 +50,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/users/create", name="user_new")
+     * @Route("/user/create", name="user_new")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return RedirectResponse|Response
@@ -70,7 +70,7 @@ class UserController extends AbstractController
             if ($this->security->isGranted('ROLE_ADMIN')) {
                 return $this->redirectToRoute('admin_user_list');
             }
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('home');
         }
         return $this->render('user/create.html.twig', [
             'form' => $form->createView()

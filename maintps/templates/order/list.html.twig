@@ -3,9 +3,9 @@
 {% block title %}Commandes{% endblock %}
 
 {% block body %}
-    <main class="container-fluid mt-4">
+    <main class="mt-4 js-filter">
         <div class="row">
-            <aside class="col-2">   
+            <aside class="col-2">
                 {% include 'order/_filter.html.twig' with {form: form} only %}
             </aside>
             <article class="col-10">
@@ -17,12 +17,13 @@
                         <a class="btn btn-primary btn-sm" href="{{ path('order_new') }}" role="button">Nouvelle commande</a>
                     </div>
                 </div>
-                {% include 'order/_orderList.html.twig' with {orders: orders} only %}
-                <div>
-                    {{ knp_pagination_render(orders) }}
+                <div >
+                    {% include 'order/_orderList.html.twig' with {orders: orders} only %}
+                </div>
+                <div class="js-filter-pagination">
+                    {% include 'order/_pagination.html.twig' %}
                 </div>
             </article>
-            
         </div>
     </main>
 

@@ -10,3 +10,7 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+import Filter from './styles/modules/Filter'
+ 
+new Filter(document.querySelector('.js-filter'))
