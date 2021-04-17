@@ -1,8 +1,8 @@
 /**
  * @property {HTMLElement} content
  * @property {HTMLElement} pagination
- * @property {HTMLFormElement} form
  * @property {HTMLElement} sorting
+ * @property {HTMLFormElement} form
  */
 export default class Filter {
   /**
@@ -12,8 +12,8 @@ export default class Filter {
     if (element === null) {
       return;
     }
-    this.content = element.querySelector(".js-filter-content");
     this.form = element.querySelector(".js-filter-form");
+    this.content = element.querySelector(".js-filter-content");
     this.sorting = element.querySelector(".js-filter-sorting");
     this.pagination = element.querySelector(".js-filter-pagination");
     this.bindEvents();
@@ -29,12 +29,21 @@ export default class Filter {
         this.loadUrl(e.target.getAttribute("href"));
       }
     };
+
     this.sorting.addEventListener("click", aClickListener);
     this.pagination.addEventListener("click", aClickListener);
 
-    this.form.querySelectorAll("input[type=checkbox]").forEach((input) => {
+    const inputForm = this.form.querySelectorAll("input");
+    inputForm.forEach((input) => {
       input.addEventListener("change", this.loadForm.bind(this));
     });
+
+    const selectForm = this.form.querySelectorAll("select");
+    selectForm.forEach((select) => {
+      select.addEventListener("change", this.loadForm.bind(this));
+    });
+
+    
   }
 
   async loadForm() {
@@ -42,6 +51,7 @@ export default class Filter {
     const url = new URL(
       this.form.getAttribute("action") || window.location.href
     );
+
     const params = new URLSearchParams();
     data.forEach((value, key) => {
       params.append(key, value);
@@ -61,7 +71,6 @@ export default class Filter {
       this.content.innerHTML = data.content;
       this.sorting.innerHTML = data.sorting;
       this.pagination.innerHTML = data.pagination;
-      console.log(data.pagination);
       history.replaceState({}, "", url);
     } else {
       console.error(response);

@@ -76,20 +76,20 @@ class OrderRepository extends ServiceEntityRepository
         
         if(!empty($search->account)) {
             $query = $query
-            ->andWhere('a.id IN (:numero)')
-            ->setParameter('numero', $search->account);
+                ->andWhere('a.id IN (:account)')
+                ->setParameter('account', $search->account);
         }
 
         if(!empty($search->provider)) {
             $query = $query
-            ->andWhere('p.id IN (:provider)')
-            ->setParameter('provider', $search->provider);
+                ->andWhere('p.id = :provider')
+                ->setParameter('provider', $search->provider);
         }
 
         if(!empty($search->status)) {
             $query = $query
-            ->andWhere('o.status IN (:status)')
-            ->setParameter('status', $search->status);
+                ->andWhere('o.status IN (:status)')
+                ->setParameter('status', $search->status);
         }
 
         if (!empty($search->designation)) {
@@ -100,11 +100,12 @@ class OrderRepository extends ServiceEntityRepository
 
         if(!empty($search->user)) {
             $query = $query
-            ->andWhere('u.id IN (:user)')
-            ->setParameter('user', $search->user);
+                ->andWhere('u.id = :user')
+                ->setParameter('user', $search->user);
         }
 
         $query = $query->getQuery();
+        //dd($query);
 
         return $this->paginator->paginate(
             $query,

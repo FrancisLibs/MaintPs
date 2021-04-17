@@ -22,3 +22,12 @@ body {
     display: block;
     position: sticky;
 }
+
+.filterbtn {
+    width: 100%;
+}
+
+.btnRAZ {
+    margin-left: 6px;
+    margin-top: 4px;
+}
