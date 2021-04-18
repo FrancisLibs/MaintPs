@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Data\SearchUser;
+use App\Form\SearchUserForm;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -27,6 +31,8 @@ class UserController extends AbstractController
     }
 
     /**
+     * Users list
+     * 
      * @Route("/users/index", name="user_list")
      * @param Request $request
      * @param EntityManagerInterface $manager
@@ -34,22 +40,21 @@ class UserController extends AbstractController
      */
     public function userList(Request $request, PaginatorInterface $paginator)
     {    
-        $data = $this->userRepository->findBy([],
-            ['lastName'  => 'desc']
-        );
+        $data = new SearchUser();
+        $data->page = $request->get('page', 1);
+        $form = $this->createForm(SearchUserForm::class, $data);
+        $form->handleRequest($request);
+        $users = $this->userRepository->findSearch($data);
 
-        $users = $paginator->paginate(
-            $data,  // Données à paginer
-            $request->query->getInt('page', 1),  // Numéro page en cours, 1 par défaut
-            14   // Nombre d'utilisateurs/page
-        );
-        
         return $this->render('user/list.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'form'  => $form->createView(),
         ]);
     }
     
     /**
+     * Create user
+     * 
      * @Route("/user/create", name="user_new")
      * @param Request $request
      * @param EntityManagerInterface $manager
@@ -75,5 +80,34 @@ class UserController extends AbstractController
         return $this->render('user/create.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * Delete user
+     *
+     * @Route("/user/{id}/delete", name="user_delete", methods="DELETE")
+     * @param                      User $user
+     * @return                     RedirectResponse
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function userDelete(User $user, Request $request)
+    {
+        $submittedToken = $request->request->get('token');
+        $currentUser = $this->getUser();
+        if ($this->isCsrfTokenValid('delete-user', $submittedToken)) {
+            if ($user <> $currentUser) {
+                $this->manager->remove($user);
+                $this->manager->flush();
+                $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
+                return $this->redirectToRoute('admin_user_list');
+            }
+
+            if ($user == $currentUser) {
+                $this->addFlash('error', 'Vous ne pouvez pas vous supprimer vous-même');
+                return $this->redirectToRoute('admin_user_list');
+            }
+        }
+        $this->addFlash('error', 'L\'utilisateur n\'a pas été supprimé.');
+        return $this->redirectToRoute('admin_user_list');
     }
 }

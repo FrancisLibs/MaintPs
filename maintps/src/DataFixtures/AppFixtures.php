@@ -74,7 +74,7 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         //USERS
-        for($i=0;$i<6;$i++){
+        for($i=0;$i<25;$i++){
             $user  = (new User())
                 ->setUsername($faker->userName)
                 ->setEmail($faker->email)

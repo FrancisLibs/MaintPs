@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Form\OrderType;
-use App\Form\SearchForm;
+use App\Form\SearchOrderForm;
 use App\Data\SearchOrder;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -54,7 +54,7 @@ class OrderController extends AbstractController
     {
         $data = new SearchOrder();
         $data->page = $request->get('page', 1);
-        $form = $this->createForm(SearchForm::class, $data);
+        $form = $this->createForm(SearchOrderForm::class, $data);
         $form->handleRequest($request);
         $orders = $this->orderRepository->findSearch($data);
         if($request->get('ajax')){
