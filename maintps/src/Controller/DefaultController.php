@@ -15,7 +15,7 @@ class DefaultController extends AbstractController
      */
     public function index(OrderRepository $orderRepository): Response
     {
-        $orders=$orderRepository->inProgressOrder();
+        $orders=$orderRepository->lateOrder(); // Commandes en retard
         return $this->render('default/default.html.twig', [
             'orders'    =>  $orders
         ]);

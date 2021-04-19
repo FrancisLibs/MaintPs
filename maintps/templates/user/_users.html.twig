@@ -1,6 +1,10 @@
 {% for user in users %}
     <tr>
-        <td>{{ user.userName }}</td>
+        <th scope="row">
+            <a href="{{ path('user_edit', { 'id': user.id }) }}">
+               {{ user.username}}
+            </a>
+        </th>
         <td class="text-center">
             {% if user.roles | length > 1 %}
                 {% for role in user.roles %} 

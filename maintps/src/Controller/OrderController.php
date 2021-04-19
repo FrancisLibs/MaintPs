@@ -30,23 +30,6 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route("/order", name="order")
-     */
-    public function orderIndex(OrderRepository $orderRepository, Request $request, PaginatorInterface $paginator): Response
-    {
-        $data = $orderRepository->inProgressOrder();
-        $orders = $paginator->paginate(
-            $data,  // Données à paginer
-            $request->query->getInt('page', 1),  // Numéro page en cours, 1 par défaut
-            15   // Nombre de commandes/page
-        );
-
-        return $this->render('order/default.html.twig', [
-            'orders'    =>  $orders
-        ]);
-    }
-
-    /**
      * @Route("/order/list", name="order_list")
      * @Security("is_granted('ROLE_USER')")
      */
@@ -119,6 +102,25 @@ class OrderController extends AbstractController
     {
         return $this->render('order/show.html.twig', [
             'order'    => $order,
+        ]);
+    }
+
+    /**
+     * @Route("/order/{id}/edit", name="order_edit")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function edit(Order $order, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(OrderType::class, $order);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($order);
+            $manager->flush();
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('order/create.html.twig', [
+            'form'  => $form->createView(),
         ]);
     }
 }

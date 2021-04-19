@@ -3,10 +3,14 @@
 {% block title %}Nouvelle commande{% endblock %}
 
 {% block body %}
-    <div class="d-flex justify-content-start">
-        <h1>Nouvelle commande</h1>
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div class="d-flex justify-content-start">
+                <h1>Nouvelle commande</h1>
+            </div>
+            
+            {{ form(form) }}
+        </div>
     </div>
-    
-    {{ form(form) }}
 
 {% endblock %}

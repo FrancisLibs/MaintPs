@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Data\SearchUser;
 use App\Form\SearchUserForm;
+use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -33,7 +34,7 @@ class UserController extends AbstractController
     /**
      * Users list
      * 
-     * @Route("/users/index", name="user_list")
+     * @Route("/admin/users/index", name="user_list")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @return RedirectResponse|Response
@@ -109,5 +110,31 @@ class UserController extends AbstractController
         }
         $this->addFlash('error', 'L\'utilisateur n\'a pas été supprimé.');
         return $this->redirectToRoute('admin_user_list');
+    }
+
+    /**
+     * Edition d'un utilisateur
+     * 
+     * @Route("/user/{id}/edit", name="user_edit")
+     * @param  User $user
+     * @param  Request $request
+     * @param  EntityManagerInterface $manager
+     * @return RedirectResponse
+     */
+    public function userEdit(User $user, Request $request, EntityManagerInterface $manager): Response
+    {
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) 
+        {          
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->addFlash('success', "L'utilisateur a bien été modifié.");
+            return $this->redirectToRoute('user_list');
+        }
+        return $this->render('user/modify.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

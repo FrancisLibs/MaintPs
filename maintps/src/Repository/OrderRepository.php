@@ -41,6 +41,23 @@ class OrderRepository extends ServiceEntityRepository
     }
 
     /**
+     * Renvoie les commandes en reatard
+     * 
+    * @return Orders[] Returns an array of Order objects
+    */
+    public function lateOrder()
+    {        
+        $nowDate = new \DateTime('now');
+        return $this->createQueryBuilder('o')            
+            ->andWhere('o.expectedDeliveryDate > :nowDate')
+            ->setParameter('nowDate', $nowDate )
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+    /**
      * 
      * @return Order[] Returns an array of in progress orders objects (status : en cours)
      */
@@ -105,7 +122,6 @@ class OrderRepository extends ServiceEntityRepository
         }
 
         $query = $query->getQuery();
-        //dd($query);
 
         return $this->paginator->paginate(
             $query,
