@@ -3,8 +3,10 @@
 namespace App\DataFixtures;
 
 use Faker;
+use DateInterval;
 use App\Entity\User;
 use App\Entity\Order;
+use App\Entity\Option;
 use App\Entity\Account;
 use App\Entity\Contact;
 use App\Entity\Invoice;
@@ -12,7 +14,6 @@ use App\Entity\Provider;
 use App\Entity\DeliveryForm;
 use App\Repository\AccountRepository;
 use App\Repository\ProviderRepository;
-use DateInterval;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -74,7 +75,8 @@ class AppFixtures extends Fixture
         $manager->flush();
 
         //USERS
-        for($i=0;$i<25;$i++){
+        for($i=0;$i<6;$i++){
+            $option = new Option();
             $user  = (new User())
                 ->setUsername($faker->userName)
                 ->setEmail($faker->email)
@@ -82,7 +84,9 @@ class AppFixtures extends Fixture
                 ->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName);
                 $user->setPassword($this->encoder->encodePassword($user,'password'));
-
+                $option->setDisplayOrderList(true);
+                $option->setUser($user);
+                $manager->persist($option);
             switch ($i) 
             {
                 case 0:

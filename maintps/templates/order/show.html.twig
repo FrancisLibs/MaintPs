@@ -6,9 +6,9 @@
     <div class="container accueil mt-3">
         <div class="row">
             <div class="col-5">
-                <div class="row justify-content-around align-items-center ">
-                    <div class="col-8">
-                        <h4 class="titreShowOrder text-center p-2">
+                <div class="row">
+                    <div class="col-7">
+                        <h4 class="titreShowOrder text-center p-1">
                             Commande
                             {% set array = [] %}
                             {% for account in order.account %}
@@ -18,27 +18,25 @@
                         </h4>
                     </div>
                     <div class="col-3">
-                        <a href="{{ path('order_edit', { 'id': order.id } ) }}" type='button' class="mb-1 btn btn-primary">Modification</a>
+                        <a href="{{ path('order_edit', { 'id': order.id } ) }}" type='button' class="btn btn-success">Modification</a>
                     </div>
                 </div>
             </div>
-            <div class="col-6 offset-1">
-                <div class="my-4 d-flex flex-column justify-content-around">
-                    <div class="row">
-                        <div class="col-5 mb-4"><strong>Fournisseur : {{ order.provider.username }}</strong></div>
-                        <div class="col-6"><strong>Désignation : </strong>{{ order.designation }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 mb-4"><strong>Montant : </strong>{{ order.expectedAmount }}</div>
-                        <div class="col-6"><strong>Date: </strong>{{ order.createdAt | date("d/m/Y") }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-5 mb-4"><strong>Date livraison prévue : </strong>{{ order.expectedDeliveryDate | date("d/m/Y") }}</div>
-                        <div class="col-6"><strong>Statut : </strong>{{ order.textStatus }}</div>
-                    </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="row mt-3">
+                    <div class="col-4"><strong>Fournisseur : {{ order.provider.username }}</strong></div>
+                    <div class="col-5"><strong>Désignation : </strong>{{ order.designation }}</div>
+                    <div class="col-3"><strong>Montant : </strong>{{ order.expectedAmount }}</div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-4"><strong>Date de commande : </strong>{{ order.createdAt | date("d/m/Y") }}</div>
+                    <div class="col-5"><strong>Date livraison prévue : </strong>{{ order.expectedDeliveryDate | date("d/m/Y") }}</div>
+                    <div class="col-3"><strong>Statut : </strong>{{ order.textStatus }}</div>
                 </div>
             </div>
-        </row>
+        </div>
         
         {# Bon de livraison et factures #}
         <div class="row">
@@ -60,7 +58,7 @@
             </div>
             <div class="col-6 offset-1">
                 <div class="d-flex">
-                    <h2 class="subTitleShowOrder col-5">Factures</h2>
+                    <h2 class="subTitleShowOrder col-3">Factures</h2>
                     <a class="btn btn-primary btn-sm" href="{{ path('order_new') }}" role="button">Ajout Facture</a>
                 </div>
                 <div class="mt-2">

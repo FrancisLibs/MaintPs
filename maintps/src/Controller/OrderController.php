@@ -3,30 +3,33 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use PHPUnit\Util\Json;
 use App\Form\OrderType;
-use App\Form\SearchOrderForm;
 use App\Data\SearchOrder;
+use App\Form\SearchOrderForm;
+use PHP_CodeSniffer\Tokenizers\JS;
 use App\Repository\OrderRepository;
+use App\Repository\OptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use PHP_CodeSniffer\Tokenizers\JS;
-use PHPUnit\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class OrderController extends AbstractController
 {
     private $orderRepository;
     private $manager;
+    private $userRepository;
 
-    public function __construct(OrderRepository $orderRepository, EntityManagerInterface $manager)
+    public function __construct(OrderRepository $orderRepository, OptionRepository $optionRepository, EntityManagerInterface $manager)
     {
         $this->orderRepository = $orderRepository;
         $this->manager = $manager;
+        $this->optionRepository = $optionRepository;
     }
 
     /**
@@ -35,6 +38,8 @@ class OrderController extends AbstractController
      */
     public function index(Request $request) : Response
     {
+        $user = $this->getUser();
+        $options = $user->getOptions();
         $data = new SearchOrder();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(SearchOrderForm::class, $data);
@@ -49,7 +54,9 @@ class OrderController extends AbstractController
         }
         return $this->render('order/list.html.twig', [
             'orders'    =>  $orders,
-            'form'      =>  $form->createView()
+            'form'      =>  $form->createView(),
+            'user'      =>  $user,
+            'options'   =>  $options,
         ]);
     }
 

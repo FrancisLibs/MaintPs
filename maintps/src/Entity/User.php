@@ -84,6 +84,12 @@ class User implements UserInterface
      */
     private $lastName;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Option::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $options;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -245,5 +251,17 @@ class User implements UserInterface
     public function __toString()
     {
         return $this->firstName;
+    }
+
+    public function getOptions(): ?Option
+    {
+        return $this->options;
+    }
+
+    public function setOptions(Option $options): self
+    {
+        $this->options = $options;
+
+        return $this;
     }
 }
